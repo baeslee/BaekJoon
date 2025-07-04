@@ -1,57 +1,54 @@
-// 03_BFS_DFS
-// p1697. 숨바꼭질
 #include<iostream>
 #include<queue>
-#include<vector>
 using namespace std;
 
-int ans, N, K;
+int N, K, ans;
 int v[100001];
+int step;
 
 void bfs(int n)
 {
 	queue<int> q;
 	q.push(n);
+	v[n] = 1;
+	int len;
 	int out;
-
 	while (!q.empty())
 	{
-		out = q.front();
-		q.pop();
-		if (out - 1 == K || out + 1 == K || out * 2 == K)
+		len = q.size();
+		for (int i = 0; i < len; ++i)
 		{
-			ans = v[out] + 1;
-			return;
-		}
-		if (out - 1 >= 0 && out - 1 <= 100000 && v[out - 1] == 0)
-		{
-			q.push(out - 1);
-			v[out - 1] = v[out] + 1;
-		}
-		if (out + 1 >= 0 && out + 1 <= 100000 && v[out + 1] == 0)
-		{
-			q.push(out + 1);
-			v[out + 1] = v[out] + 1;
-		}
-		if (out * 2 >= 0 && out * 2 <= 100000 && v[out * 2] == 0)
-		{
-			q.push(out * 2);
-			v[out * 2] = v[out] + 1;
-		}
-	}
+			out = q.front();
+			q.pop();
 
+			if (out == K)
+				return;
+
+			if (out - 1 >= 0 && v[out - 1]==0)
+			{
+				q.push(out - 1);
+				v[out - 1] = 1;
+			}
+			if (out + 1 <= 100000 && v[out + 1] == 0)
+			{
+				q.push(out + 1);
+				v[out + 1] = 1;
+			}
+			if (out *2 <= 100000 && v[out *2] == 0)
+			{
+				q.push(out *2);
+				v[out *2] = 1;
+			}
+		}
+		step++;
+	}
 }
 
-int main()
+int main(void)
 {
 	cin >> N >> K;
-	if (N == K)
-	{
-		cout << 0;
-		return 0;
-	}
 	bfs(N);
-	cout << ans;
+	cout << step;
 	
 	return 0;
 }
