@@ -1,53 +1,54 @@
-// p2644. 촌수계산
 #include<iostream>
-#include<vector>
+#include<queue>;
 using namespace std;
 
-int ans, N, a, b;
-int arr[101][101];
-vector<int> q;
-vector<int> v;
+int n, m, ans;
+int s, e;
+int map[101][101];
+int v[101];
 
-void bfs(int n)
-{
-	int num;
-	q.push_back(n);
-	v[n] = 1;
+void bfs(int num) {
+	queue<int> q;
+	q.push(num);
+	v[num] = 1;
+	
+	int out;
 	while (!q.empty())
 	{
-		num = q.front();
-		q.erase(q.begin());
-		for (int i = 1; i <= N; ++i)
+		out = q.front();
+		q.pop();
+		for (int i = 1; i <= n; ++i)
 		{
-			if (arr[num][b] == 1)
+			if (map[out][e] == 1)
 			{
-				ans = arr[num][0] + 1;
+				ans = map[out][0] + 1;
 				return;
 			}
-			if (arr[num][i] == 1 && v[i] != 1)
+			if (map[out][i] == 1 && v[i] == 0)
 			{
-				q.push_back(i);
+				q.push(i);
 				v[i] = 1;
-				arr[i][0] = arr[num][0] + 1;
+				map[i][0] = map[out][0] + 1;
 			}
 		}
 	}
 	ans = -1;
 }
+
 int main(void)
 {
-	int m, x, y;
-	cin >> N;
-	v.resize(N + 1, 0);
-	cin >> a >> b;
+	cin >> n;
+	cin >> s >> e;
 	cin >> m;
+	int x, y;
 	for (int i = 0; i < m; ++i)
 	{
 		cin >> x >> y;
-		arr[x][y] = 1;
-		arr[y][x] = 1;
+		map[x][y] = 1;
+		map[y][x] = 1;
 	}
-	bfs(a);
+	bfs(s);
 	cout << ans;
+	
 	return 0;
 }
