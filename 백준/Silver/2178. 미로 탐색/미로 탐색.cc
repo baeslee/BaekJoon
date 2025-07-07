@@ -1,43 +1,43 @@
-#include<iostream>
-#include<queue>
-#include<cstring>
-#include<algorithm>
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <string>
 using namespace std;
 
+int N, M, ans;
 int map[102][102];
 int v[102][102];
-int N, M, ans;
 
 int dr[4] = { 1,-1,0,0 };
-int dc[4] = { 0,0,1,-1 };
-
+int dc[4] = { 0,0, 1,-1 };
 void bfs(pair<int, int> p)
 {
-	queue<pair<int,int>> q;
+	queue <pair<int, int>> q;
 	q.push(p);
 	v[p.first][p.second] = 1;
-	
+
+	pair<int, int> out;
 	int r, c, cr, cc;
-	pair<int, int> temp;
 	while (!q.empty())
 	{
-		temp = q.front();
+		out = q.front();
 		q.pop();
-		r = temp.first;
-		c = temp.second;
+		r = out.first;
+		c = out.second;
+		if (r == N && c == M)
+		{
+			ans = map[r][c];
+			return;
+		}
 		for (int i = 0; i < 4; ++i)
 		{
 			cr = r + dr[i];
 			cc = c + dc[i];
-			if (cr == N && cc == M)
-			{
-				ans = v[r][c] + 1;
-				return;
-			}
-			if (map[cr][cc] == 1 && v[cr][cc] == 0)
+			if (map[cr][cc] > 0 && v[cr][cc] == 0)
 			{
 				q.push(make_pair(cr, cc));
-				v[cr][cc] = v[r][c] + 1;
+				v[cr][cc] = 1;
+				map[cr][cc] = map[r][c] + 1;
 			}
 		}
 	}
@@ -46,15 +46,14 @@ void bfs(pair<int, int> p)
 int main(void)
 {
 	cin >> N >> M;
-	string s;
-	for (int i = 0; i < N; ++i)
+	string str;
+	for (int i = 1; i <= N; ++i)
 	{
-		cin >> s;
-		for (int j = 0; j < M; ++j)
-		{
-			map[i + 1][j + 1] = s[j] - '0';
-		}
+		cin >> str;
+		for (int j = 1; j <= str.size(); ++j)
+			map[i][j] = str[j - 1] - '0';
 	}
+
 	bfs(make_pair(1, 1));
 	cout << ans;
 
